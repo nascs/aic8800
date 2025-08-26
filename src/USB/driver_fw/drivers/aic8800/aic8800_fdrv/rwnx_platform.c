@@ -3479,7 +3479,7 @@ static int rwnx_plat_userconfig_load(struct rwnx_hw *rwnx_hw) {
         #ifdef CONFIG_POWER_LIMIT
         rwnx_plat_powerlimit_load_8800dcdw(rwnx_hw, PRODUCT_ID_AIC8800DW);
         #endif
-    }else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81){
+    }else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80 || rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81){
         rwnx_plat_userconfig_load_8800d80(rwnx_hw);
     }else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2){

@@ -775,7 +775,7 @@ static int aic_priv_cmd_rdwr_pwrlvl (struct rwnx_hw *rwnx_hw, int argc, char *ar
 		AICWFDBG(LOGERROR, "wrong func: %x\n", func);
 		return -EINVAL;
 	}
-	if((dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2)){
+	if((dev->chipid == PRODUCT_ID_AIC8800D80) || (dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2)){
 		memcpy(command, &cfm.rftest_result[0], 6 * 12);
 		return (6 * 12);
 	} else {
@@ -801,7 +801,8 @@ static int aic_priv_cmd_rdwr_pwrofst (struct rwnx_hw *rwnx_hw, int argc, char *a
 	if (func == 0) { // read cur
 		rwnx_send_rftest_req(rwnx_hw, RDWR_PWROFST, 0, NULL, &cfm);
 	} else if (func <= 4) { // write 2.4g/5g pwr ofst and ant0/1
-		if ((argc > 4) && ((dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2))) {
+		// if ((argc > 4) && ((dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2))) {
+		if ((argc > 4) && ((dev->chipid == PRODUCT_ID_AIC8800D80) || (dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2))) {
 			u8_l type = (u8_l)command_strtoul(argv[2], NULL, 16);
 			u8_l chgrp = (u8_l)command_strtoul(argv[3], NULL, 16);
 			s8_l pwrofst = (u8_l)command_strtoul(argv[4], NULL, 10);
@@ -823,7 +824,7 @@ static int aic_priv_cmd_rdwr_pwrofst (struct rwnx_hw *rwnx_hw, int argc, char *a
 	}
 	if ((dev->chipid == PRODUCT_ID_AIC8800DC) || (dev->chipid == PRODUCT_ID_AIC8800DW)) { // 3 = 3 (2.4g)
 		res_len = 3;
-	} else if (dev->chipid == PRODUCT_ID_AIC8800D81) { // 3 * 2 (2.4g) + 3 * 6 (5g)
+	} else if ((dev->chipid == PRODUCT_ID_AIC8800D80) || (dev->chipid == PRODUCT_ID_AIC8800D81)) { // 3 * 2 (2.4g) + 3 * 6 (5g)
 		res_len = 3 * 3 + 3 * 6;
 	} else if ((dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2)) { // ant0/1
 		res_len = ( 3 * 3 + 3 * 6 ) * 2;
@@ -908,7 +909,7 @@ static int aic_priv_cmd_rdwr_efuse_pwrofst (struct rwnx_hw *rwnx_hw, int argc, c
 	if (func == 0) { // read cur
 		rwnx_send_rftest_req(rwnx_hw, RDWR_EFUSE_PWROFST, 0, NULL, &cfm);
 	} else if (func <= 4) { // write 2.4g/5g pwr ofst and ant0/1
-		if ((argc > 4) && ((dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2))) {
+		if ((argc > 4) && ((dev->chipid == PRODUCT_ID_AIC8800D80) || (dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2))) {
 			u8_l type = (u8_l)command_strtoul(argv[2], NULL, 16);
 			u8_l chgrp = (u8_l)command_strtoul(argv[3], NULL, 16);
 			s8_l pwrofst = (u8_l)command_strtoul(argv[4], NULL, 10);
@@ -931,7 +932,7 @@ static int aic_priv_cmd_rdwr_efuse_pwrofst (struct rwnx_hw *rwnx_hw, int argc, c
 	}
 	if ((dev->chipid == PRODUCT_ID_AIC8800DC) || (dev->chipid == PRODUCT_ID_AIC8800DW)) { // 6 = 3 (2.4g) * 2
 		res_len = 3 * 2;
-	} else if ((dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2)) { // 3 * 2 (2.4g) + 3 * 6 (5g)
+	} else if ((dev->chipid == PRODUCT_ID_AIC8800D80) || (dev->chipid == PRODUCT_ID_AIC8800D81) || (dev->chipid == PRODUCT_ID_AIC8800D81X2) || (dev->chipid == PRODUCT_ID_AIC8800D89X2)) { // 3 * 2 (2.4g) + 3 * 6 (5g)
 		res_len = (3 * 3 + 3 * 6) * 2;
 	} else { // 7 = 3(2.4g) + 4(5g)
 		res_len = 3 + 4;
@@ -1725,6 +1726,7 @@ int android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
 		if(g_rwnx_plat && g_rwnx_plat->usbdev->rwnx_hw){
 			if (g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8800DW ||
 				(g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8800DC) ||
+				(g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8800D80) ||
 				(g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8800D81) ||
 				(g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8800D81X2) ||
 				(g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8800D89X2)){

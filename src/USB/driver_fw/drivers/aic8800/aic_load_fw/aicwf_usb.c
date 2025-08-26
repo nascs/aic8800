@@ -1680,6 +1680,7 @@ static int aicwf_usb_probe(struct usb_interface *intf, const struct usb_device_i
 
 	if(fw_loaded == 1 && 
         (id->idProduct == USB_DEVICE_ID_AIC_8801 || 
+        id->idProduct == USB_DEVICE_ID_AIC_8800D80 ||
         id->idProduct == USB_DEVICE_ID_AIC_8800D81 ||
 	    id->idProduct == USB_DEVICE_ID_AIC_8800D41 ||
 	    id->idProduct == USB_DEVICE_ID_AIC_8800D81X2 ||

@@ -1171,6 +1171,9 @@ int rwnx_send_rf_calib_req(struct rwnx_hw *rwnx_hw, struct mm_set_rf_calib_cfm *
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW){
         rf_calib_req->cal_cfg_24g = 0x0f8f;
         rf_calib_req->cal_cfg_5g = 0;
+    }else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80){
+        rf_calib_req->cal_cfg_24g = 0x0f8f;
+        rf_calib_req->cal_cfg_5g = 0x0f0f;
     }else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81){
         rf_calib_req->cal_cfg_24g = 0x0f8f;
         rf_calib_req->cal_cfg_5g = 0x0f0f;

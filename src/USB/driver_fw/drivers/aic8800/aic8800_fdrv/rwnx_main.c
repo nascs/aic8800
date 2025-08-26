@@ -1594,6 +1594,7 @@ static int rwnx_close(struct net_device *dev)
             if (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8801 ||
                     ((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DC ||
                       rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW ||
+                      rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80 ||
                       rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
                       rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
                       rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2)&& testmode == 0)) {
@@ -2095,7 +2096,7 @@ void set_txpwrloss_ctrl(struct rwnx_hw *rwnx_hw, s8 value)
 	if (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DC ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW) {
 		rwnx_send_txpwr_lvl_req(rwnx_hw);
-	} else if ((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81)) {
+	} else if ((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80) || (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81)) {
 		rwnx_send_txpwr_lvl_v3_req(rwnx_hw);
 	} else if ((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2) ||
 		(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2)) {
@@ -5981,6 +5982,7 @@ static void rwnx_reg_notifier(struct wiphy *wiphy,
     if (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8801 ||
        ((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DC ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW ||
+        rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80 ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2) && testmode == 0)){
@@ -8129,7 +8131,7 @@ int rwnx_ic_system_init(struct rwnx_hw *rwnx_hw){
 		if (start_from_bootrom(rwnx_hw))
 			return -1;
 #endif
-	}else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81){
+	}else if((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80) || (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81)){
 		rwnx_plat_userconfig_load_8800d80(rwnx_hw);
         #ifdef CONFIG_POWER_LIMIT
         rwnx_plat_powerlimit_load_8800d80(rwnx_hw);
@@ -8172,7 +8174,7 @@ int rwnx_ic_rf_init(struct rwnx_hw *rwnx_hw){
 			rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW){
 		if ((ret = aicwf_set_rf_config_8800dc(rwnx_hw, &cfm)))
 			return -1;
-	}else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81){
+	}else if((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80) || (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81)){
 		if ((ret = aicwf_set_rf_config_8800d80(rwnx_hw, &cfm)))
 			return -1;
 	}else if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
@@ -8374,7 +8376,8 @@ if((g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8801) ||
 	    ret = rwnx_send_set_stack_start_req(rwnx_hw, 1, 0, CO_BIT(5), rwnx_hw->fwlog_en, &set_start_cfm);
 	}
 #else
-    if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
+    if(rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80 ||
+        rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
         rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2){
         ret = rwnx_send_set_stack_start_req(rwnx_hw, 1, 0, CO_BIT(5), rwnx_hw->fwlog_en, &set_start_cfm);
@@ -8532,7 +8535,8 @@ if((g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8801) ||
 	if (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8801 ||
 		((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DC ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW ||
-		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
+		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80 ||
+        rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2) && testmode == 0)) {
     	rwnx_send_me_config_req(rwnx_hw);
@@ -8557,7 +8561,8 @@ if((g_rwnx_plat->usbdev->chipid == PRODUCT_ID_AIC8801) ||
 	if (rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8801 ||
 		((rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DC ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800DW ||
-		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
+		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D80 ||
+        rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81 ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D81X2 ||
 		rwnx_hw->usbdev->chipid == PRODUCT_ID_AIC8800D89X2) && testmode == 0)) {
 		rwnx_send_me_chan_config_req(rwnx_hw, "00");
